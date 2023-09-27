@@ -37,7 +37,7 @@ def find_optimal_combination(bonds, funds):
         funds (int): amount of funds available
 
     Returns:
-        tuple: (best_combination, best_profit, best_combination_price)
+        tuple: (best_combination, best_profit)
     """
     num_bonds = len(bonds)
     # Set a matrix to store maximum profit for each subproblem, initialized with zeros.
@@ -75,9 +75,8 @@ def find_optimal_combination(bonds, funds):
         i -= 1
 
     best_profit = dp[num_bonds][funds]
-    best_combination_price = sum([bond.price for bond in best_combination])
 
-    return best_combination, best_profit, best_combination_price
+    return best_combination, best_profit
 
 
 def main():
@@ -92,10 +91,11 @@ def main():
             bond = Bond(row["Bonds"], int(row["Price"]), int(row["Yield"]))
             bonds.append(bond)
 
-    best_combination, best_profit, total_price = find_optimal_combination(bonds, funds)
+    best_combination, best_profit = find_optimal_combination(bonds, funds)
+    best_combination_cost = sum([bond.price for bond in best_combination])
     print("Best combination: ", [bond.name for bond in best_combination[::-1]])
     print(f"Associated profit: {best_profit:.2f} €")
-    print(f"Total price: {total_price} €\n")
+    print(f"Total price: {best_combination_cost} €\n")
 
 
 if __name__ == "__main__":

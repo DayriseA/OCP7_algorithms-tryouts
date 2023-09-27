@@ -39,7 +39,6 @@ def bruteforce_w_itertools(bonds, funds):
     """
     best_combination = []
     best_profit = 0
-    best_combination_price = 0
 
     for i in range(1, len(bonds) + 1):
         for combination in itertools.combinations(bonds, i):
@@ -49,9 +48,8 @@ def bruteforce_w_itertools(bonds, funds):
             if total_price <= funds and total_profit > best_profit:
                 best_combination = combination
                 best_profit = total_profit
-                best_combination_price = total_price
 
-    return best_combination, best_profit, best_combination_price
+    return best_combination, best_profit
 
 
 def generate_combinations(bonds):
@@ -90,7 +88,6 @@ def bruteforce_wo_itertools(bonds, funds):
     """
     best_combination = []
     best_profit = 0
-    best_combination_price = 0
 
     combinations = generate_combinations(bonds)
 
@@ -98,9 +95,8 @@ def bruteforce_wo_itertools(bonds, funds):
         if total_price <= funds and total_profit > best_profit:
             best_combination = combination
             best_profit = total_profit
-            best_combination_price = total_price
 
-    return best_combination, best_profit, best_combination_price
+    return best_combination, best_profit
 
 
 def main():
@@ -115,15 +111,17 @@ def main():
             bond = Bond(row["Bonds"], int(row["Price"]), int(row["Yield"]))
             bonds.append(bond)
 
-    best_combination, best_profit, total_price = bruteforce_w_itertools(bonds, funds)
+    best_combination, best_profit = bruteforce_w_itertools(bonds, funds)
+    best_combination_cost = sum([bond.price for bond in best_combination])
     print("Best combination: ", [bond.name for bond in best_combination])
     print(f"Associated profit: {best_profit:.2f} €")
-    print(f"Total price: {total_price} €\n")
+    print(f"Total price: {best_combination_cost} €\n")
 
-    best_combination, best_profit, total_price = bruteforce_wo_itertools(bonds, funds)
+    best_combination, best_profit = bruteforce_wo_itertools(bonds, funds)
+    best_combination_cost = sum([bond.price for bond in best_combination])
     print("Best combination: ", [bond.name for bond in best_combination])
     print(f"Associated profit: {best_profit:.2f} €")
-    print(f"Total price: {total_price} €")
+    print(f"Total price: {best_combination_cost} €")
 
 
 if __name__ == "__main__":
