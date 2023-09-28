@@ -1,13 +1,16 @@
 """Extract historical data from local file and use our algorithms for backtesting."""
 
-import csv
+import csv, math
 from optimized import find_optimal_combination
 
 
 class Asset:
     def __init__(self, name, price, yield_) -> None:
         self.name = name
-        self.price = round(price)
+        self.price = math.ceil(price)
+        # round to nearest integer to have best possible profit at the cost of
+        # slightly exceeding the funds limit
+        # self.price = round(price)
         self.price_difference = price - self.price
         self.yield_ = yield_
         self.profit = price * yield_ / 100
@@ -16,7 +19,7 @@ class Asset:
         exact_price = self.price + self.price_difference
         return (
             f"{self.name} - {exact_price:.2f}€ - "
-            f"{self.profit:.2f}% yield (for 2 years)"
+            f"{self.yield_:.2f}% yield (for 2 years)"
         )
 
 
