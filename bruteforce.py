@@ -1,7 +1,7 @@
 """
 Bruteforce algorithm for bond portfolio optimization.
 A merely adaptation of the knapsack problem.
-We will not discuss the solution of nested loops because for 20 elements it would be 
+We will not discuss the solution of nested loops because for 20 elements it would be
 really horrible to write, and O(20^20) seems like a pretty bad idea to try.
 """
 
@@ -11,6 +11,7 @@ import time
 
 
 class Bond:
+    """Bond class."""
     def __init__(self, name, price, yield_):
         self.name = name
         self.price = price
@@ -40,7 +41,9 @@ def bruteforce_w_itertools(bonds, funds):
     best_combination = []
     best_profit = 0
 
+    # O(C(n,1)+ C(n,2) + ... + C(n,n)) = O(2^n)
     for i in range(1, len(bonds) + 1):
+        # generate all possible combinations without permutations: O(C(n, k))
         for combination in itertools.combinations(bonds, i):
             total_price = sum([bond.price for bond in combination])
             total_profit = sum([bond.profit for bond in combination])
@@ -62,12 +65,13 @@ def generate_combinations(bonds):
     n = len(bonds)
     combinations = []
 
-    for i in range(1, 2**n):
+    for i in range(1, 2**n):  # O(2^n)
         current_combination = []
         total_price = 0
         total_profit = 0
 
-        for j in range(n):
+        for j in range(n):  # O(n), not decisive vs O(2^n)
+            # check if i (in binary) has a 1 at the j-th position (from right to left)
             if (i >> j) & 1:
                 bond = bonds[j]
                 current_combination.append(bond)
@@ -89,7 +93,7 @@ def bruteforce_wo_itertools(bonds, funds):
     best_combination = []
     best_profit = 0
 
-    combinations = generate_combinations(bonds)
+    combinations = generate_combinations(bonds)  # O(2^n)
 
     for combination, total_price, total_profit in combinations:
         if total_price <= funds and total_profit > best_profit:
@@ -100,6 +104,7 @@ def bruteforce_wo_itertools(bonds, funds):
 
 
 def main():
+    """Main function."""
     bonds = []
     funds = 500
     bonds_path = "data/bonds_list.csv"

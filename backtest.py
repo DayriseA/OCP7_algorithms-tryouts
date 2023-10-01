@@ -1,10 +1,12 @@
 """Extract historical data from local file and use our algorithms for backtesting."""
 
-import csv, math
+import csv
+import math
 from optimized import find_optimal_combination
 
 
 class Asset:
+    """Asset class."""
     def __init__(self, name, price, yield_) -> None:
         self.name = name
         self.price = math.ceil(price)
@@ -45,6 +47,7 @@ def get_assets_from_csv(path):
 
 
 def main():
+    """Main function. Backtest on the 2 datasets provided by Sienna."""
     sienna_assets_1 = get_assets_from_csv("data/dataset1_Sienna.csv")
     sienna_assets_2 = get_assets_from_csv("data/dataset2_Sienna.csv")
     funds = 500

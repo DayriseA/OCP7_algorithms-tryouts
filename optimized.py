@@ -8,6 +8,7 @@ import time
 
 
 class Bond:
+    """Bond class."""
     def __init__(self, name, price, yield_):
         self.name = name
         self.price = price
@@ -44,8 +45,9 @@ def find_optimal_combination(bonds, funds):
     # dp[i][j] represents the maximum profit for the first i bonds with j funds.
     dp = [[0 for _ in range(funds + 1)] for _ in range(num_bonds + 1)]
 
-    for i in range(1, num_bonds + 1):
-        for j in range(funds + 1):
+    # O(i * j)
+    for i in range(1, num_bonds + 1):  # O(i)
+        for j in range(funds + 1):  # O(j)
             bond = bonds[i - 1]  # 0-indexed, so current bond is i-1
             if bond.price <= j:
                 # Two options:
@@ -69,8 +71,9 @@ def find_optimal_combination(bonds, funds):
     i = num_bonds
     j = funds
     while i > 0 and j > 0:
-        if dp[i][j] != dp[i - 1][j]:
+        if dp[i][j] != dp[i - 1][j]:  # Then bond at i-1 has been included
             best_combination.append(bonds[i - 1])
+            # subtract the price of the included bond from j
             j -= bonds[i - 1].price
         i -= 1
 
@@ -80,6 +83,7 @@ def find_optimal_combination(bonds, funds):
 
 
 def main():
+    """Main function."""
     bonds = []
     funds = 500
     bonds_path = "data/bonds_list.csv"
